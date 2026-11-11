@@ -1,0 +1,19 @@
+name: Build APK
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: 8.9 }
+      - run: gradle assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GuiaIA-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+Haz clic en Commit changes... (arriba a la derecha) y confirma con Commit changes.
+Abre la pestaña Actions. Cuando la ejecución tenga la palomita verde, entra a ella y baja a Artifacts.
+Descarga GuiaIA-apk, descomprímelo e instala app-debug.apk en tu Android.
