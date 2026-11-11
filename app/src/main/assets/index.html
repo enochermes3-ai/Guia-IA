@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de Inteligencia Artificial</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#14213d;--mut:#586178;--line:#d9deea;--acc:#1f4fd8;--accfg:#fff;--gb:#dcf4e4;--gf:#0f6a33;--fb:#fdefc2;--ff:#774f00;--pb:#fddcdc;--pf:#a01919;--ib:#dae6ff;--if:#1a43ad;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0c1220;--card:#151d31;--ink:#e8ecf7;--mut:#9aa5bf;--line:#26314d;--acc:#6f95ff;--accfg:#0c1220;--gb:#12351f;--gf:#7fe0a4;--fb:#3a2f0b;--ff:#f2cf72;--pb:#3d1717;--pf:#ff9a9a;--ib:#162a55;--if:#9bbcff}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0c1220;--card:#151d31;--ink:#e8ecf7;--mut:#9aa5bf;--line:#26314d;--acc:#6f95ff;--accfg:#0c1220;--gb:#12351f;--gf:#7fe0a4;--fb:#3a2f0b;--ff:#f2cf72;--pb:#3d1717;--pf:#ff9a9a;--ib:#162a55;--if:#9bbcff}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:1080px;margin:0 auto;padding:20px 14px 40px}
+h1{font-size:clamp(26px,5vw,40px);line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:0 0 16px;max-width:60ch}
+.tabs,.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:thin}
+button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button.on{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.tabs button{border-radius:8px;font-weight:600}
+input{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin:4px 0 8px}
+.n{color:var(--mut);font-size:14px;margin:6px 0}
+h2{font-size:21px;margin:26px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.card h3{font-size:17px;margin:0}
+.card a{color:var(--acc);text-decoration:none}
+.card a:hover{text-decoration:underline}
+.b{align-self:flex-start;font-size:12px;font-weight:700;padding:2px 9px;border-radius:6px}
+.g{background:var(--gb);color:var(--gf)}.f{background:var(--fb);color:var(--ff)}.p{background:var(--pb);color:var(--pf)}.i{background:var(--ib);color:var(--if)}
+.pr{color:var(--mut);font-size:13px}
+.id{font-size:14.5px}
+.w{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:520px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+th{background:var(--acc);color:var(--accfg)}
+tr:last-child td{border-bottom:0}
+.pf{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--acc);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.pf h3{margin:0 0 4px;font-size:18px}.pf b{color:var(--acc)}.pf p{margin:4px 0 0;color:var(--mut)}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--acc)}}
+</style>
+</head>
+<body>
+<main>
+<h1>Guía de Inteligencia Artificial</h1>
+<p class="sub">Las IA más importantes de cada categoría para que elijas mejor y seas más eficiente.</p>
+<div class="tabs" id="tabs"></div>
+<div id="tools">
+<input id="q" type="search" placeholder="Buscar herramienta o para qué sirve…" aria-label="Buscar">
+<div class="chips" id="cats"></div>
+<div class="chips" id="typ"></div>
+</div>
+<div id="res"></div>
+</main>
+<script>
+const D=[
+['💬','Chatbots y asistentes',[
+['ChatGPT (OpenAI)','F','Gratis con límites · Plus desde $20/mes','Uso general del día a día en una sola app','chatgpt.com'],
+['Claude (Anthropic)','F','Gratis con límites · Pro desde $20/mes','Documentos largos, análisis profundo y trabajo profesional','claude.ai'],
+['Gemini (Google)','F','Gratis con límites · Advanced desde $20/mes','Quien ya vive en Google Workspace','gemini.google.com'],
+['DeepSeek','G','Gratis · API desde ~$0.27/millón de tokens','Equipos técnicos con presupuesto ajustado','chat.deepseek.com'],
+['Grok (xAI)','I','Incluido con X Premium','Seguir la conversación pública en tiempo real','grok.com'],
+['Kimi (Moonshot AI)','F','Gratis con límites · Kimi Code desde ~$19/mes','Modelo de nivel frontera sin licencias o en tu servidor','kimi.com'],
+['Microsoft Copilot','F','Gratis · Microsoft 365 desde $9.99/mes','Equipos que ya trabajan con Microsoft 365','copilot.microsoft.com']]],
+['💻','Programación y desarrollo',[
+['Claude Code (Anthropic)','I','Incluido en planes Claude Pro/Max','Desarrollo con agentes y código complejo','claude.com/product/claude-code'],
+['GitHub Copilot','F','Free con límite mensual · desde $10/mes','Autocompletado en tu editor de siempre','github.com/features/copilot'],
+['Cursor','F','Free limitado · Pro desde $20/mes','Flujos ágiles con agentes que hacen el trabajo pesado','cursor.com'],
+['Google Antigravity','G','Gratis (app independiente)','Delegar tareas completas de desarrollo a agentes','antigravity.google'],
+['Codex (OpenAI)','I','Incluido en planes ChatGPT · CLI gratis','Quienes ya usan ChatGPT y quieren un agente de código','openai.com/codex'],
+['Blackbox AI','F','Gratis con chat ilimitado · Pro desde $10/mes','Probar muchos modelos sin pagar cada uno','blackbox.ai']]],
+['🔎','Investigación y comparación',[
+['Perplexity','F','Gratis con límites · Pro desde $20/mes','Investigar y verificar datos con fuentes','perplexity.ai'],
+['NotebookLM (Google)','G','Gratis','Estudiar e interrogar tu propio material','notebooklm.google'],
+['LMArena','G','Gratis','Decidir qué modelo rinde mejor para tu caso','lmarena.ai'],
+['Design Arena','G','Gratis','Probar varias IA de diseño y código a la vez','designarena.ai']]],
+['🎨','Creación de imágenes',[
+['Midjourney v7','P','Desde $10/mes (sin plan gratis)','Ilustración artística y fotorrealismo de alta gama','midjourney.com'],
+['DALL·E 4 (OpenAI)','I','Incluido en ChatGPT Plus','Generar imágenes rápido sin salir del chat','openai.com/dall-e-3'],
+['Stable Diffusion','G','Gratis / código abierto (instalable en local)','Control total y cero costos recurrentes','stability.ai'],
+['Ideogram','F','Gratis con límites · desde ~$8/mes','Carteles, portadas y logos con texto','ideogram.ai'],
+['Playground AI','F','Gratis con límites · Pro desde $10/mes','Diseño rápido tipo Canva generado por IA','playground.com']]],
+['🎬','Creación de video',[
+['Sora 2 (OpenAI)','I','Incluido en ChatGPT Plus','Clips cortos narrativos y prototipos creativos','sora.chatgpt.com'],
+['Runway','F','Gratis con límites · desde $12/mes','Edición de video profesional asistida por IA','runwayml.com'],
+['Kling','F','Gratis con límites · planes pagos','Clips realistas con movimiento complejo','klingai.com'],
+['Google Veo','P','Incluido en planes Google AI','Video dentro de un flujo ya montado en Google','deepmind.google/models/veo'],
+['Higgsfield','F','Gratis con límites · desde $9/mes','Combinar varios modelos de video en una suscripción','higgsfield.ai'],
+['Wan 2.2 Animate','G','Gratis, sin registro','Animar fotos o reemplazar personajes sin pagar','wan.video'],
+['LTX-2 (Lightricks)','G','Gratis / código abierto','Convertir una imagen en una persona hablando','ltx.studio'],
+['Vibes (Meta)','F','Gratis con límites','Videos cortos y verticales para redes sociales','meta.ai/vibes'],
+['Omni-Video-Factory','G','Gratis (espacio de Hugging Face)','Generar o alargar clips sin instalar nada','huggingface.co/spaces?q=Omni-Video-Factory'],
+['Hailuo / MiniMax','F','Gratis con límites · planes por créditos','Movimiento realista y caras expresivas a bajo costo','hailuoai.video'],
+['InVideo AI','F','Gratis con límites · desde ~$20/mes','Videos de marketing sin saber editar','invideo.io'],
+['Visla','F','Gratis con límites · Pro desde ~$19/mes','Equipos que producen muchos videos cortos','visla.us'],
+['Topview AI','F','Créditos de prueba · desde ~$28/mes','Videos de producto en minutos','topview.ai'],
+['Flow (Google)','F','Créditos diarios · desde ~$20/mes','Narrativas y escenas con calidad de cine','labs.google/flow']]],
+['🎵','Música, audio y voz',[
+['Suno','F','Gratis con límites · Pro desde $10/mes','Canciones completas con letra cantada','suno.com'],
+['Udio','F','Gratis con límites · Pro desde $10/mes','Producción instrumental y electrónica','udio.com'],
+['MusicGPT','F','Gratis con compras en la app (iOS)','Crear canciones desde el celular en segundos','musicgpt.com'],
+['ElevenLabs','F','Gratis con límites · desde $5/mes','Doblaje, narración y clonación de voz','elevenlabs.io'],
+['AIVA','F','Gratis con límites · desde $11/mes','Música orquestal y bandas sonoras','aiva.ai'],
+['VibeVoice','F','Gratis 30 min/mes · desde $3/mes','Redactar dictando en vez de tipear','vibevoice.net'],
+['Mozart AI','F','Gratis con créditos · desde $10/mes','Canciones con videoclip desde el celular','mozart.ai']]],
+['📋','Productividad y oficina',[
+['Notion AI','P','Complemento de pago sobre Notion','Organizar y redactar en tu workspace','notion.com/product/ai'],
+['Gamma','F','Gratis con límites · desde $10/mes','Presentaciones y páginas en minutos','gamma.app'],
+['Otter.ai','F','Gratis con límites · Pro desde $10/mes','Actas y transcripción de reuniones o clases','otter.ai']]],
+['⚙️','Automatización y agentes',[
+['n8n','G','Open source (self-host) o cloud desde ~$20/mes','Automatizar procesos con control de infraestructura','n8n.io'],
+['Make','F','Gratis con límites · desde $9/mes','Automatizar procesos de negocio sin programar','make.com'],
+['Zapier AI','F','Gratis con límites · desde $20/mes','Conectar apps rápido sin conocimientos técnicos','zapier.com'],
+['Abacus.AI (ChatLLM)','F','Básico $10/mes · Pro $20/mes','Reemplazar varias suscripciones por un solo panel','chatllm.abacus.ai']]],
+['🖥️','IA en tu computadora',[
+['Pinokio','G','Gratis, código abierto, 100% local','Usar herramientas de IA sin mensualidades','pinokio.computer'],
+['Ollama','G','Gratis, código abierto, 100% local','Correr modelos abiertos dentro de un flujo técnico','ollama.com'],
+['LM Studio','G','Gratis, app de escritorio','Empezar con IA local con interfaz gráfica','lmstudio.ai'],
+['GLM (Zhipu AI / Z.ai)','G','Gratis, licencia MIT · también por API','Modelo de nivel frontera sin servidor externo','z.ai']]],
+['📞','Agentes de voz y llamadas',[
+['Vapi','P','Desde ~$0.05/min + costos de modelo','Equipos técnicos que arman su propio agente','vapi.ai'],
+['Retell AI','P','Desde ~$0.07/min','Operaciones telefónicas de alto volumen','retellai.com'],
+['Synthflow','P','Desde ~$375/mes (2.000 min)','Ventas sin perfil técnico, flujos de arrastrar y soltar','synthflow.ai'],
+['Bland AI','P','Desde ~$0.11/min','Campañas de llamadas salientes a gran escala','bland.ai']]],
+['🎮','Videojuegos',[
+['Rosebud AI','F','Gratis con límites · Premium desde $10/mes','Prototipar un juego jugable sin programar','rosebud.ai'],
+['Meshy AI','F','Gratis (200 créditos/mes)','Modelos 3D sin contratar a un modelador','meshy.ai'],
+['Ludo AI','F','Gratis limitado · Indie desde $20/mes','Ideación y diseño antes de programar','ludo.ai'],
+['SeaVerse Game Maker','F','Gratis con límites · desde ~$19.99/mes','Publicar un juego rápido sin escribir código','seaverse.ai'],
+['Claude (Artifacts)','F','Gratis con límites · Pro desde $20/mes','Probar una idea de juego en minutos','claude.ai'],
+['GDevelop','G','Gratis, código abierto (exportaciones diarias limitadas)','Crear y publicar juegos sin programar','gdevelop.io'],
+['microStudio','G','Gratis, código abierto (MIT)','Aprender a programar juegos 2D','microstudio.dev'],
+['Buildbox Free','F','Plan gratuito limitado','Juegos móviles hipercasuales sin programar','buildbox.com']]],
+['📱','Crear apps',[
+['Base44','F','Gratis 25 créditos/mes · desde $16/mes','Apps reales con backend ya resuelto','base44.com'],
+['Appy Pie','P','Prueba de 7 días · desde ~$16/mes por app','Una app móvil publicada rápido','appypie.com'],
+['Jotform AI Agents','F','Gratis con límites · desde $34/mes','Automatizar con IA flujos de formularios','jotform.com/ai/agents'],
+['Replit','F','Gratis · Core desde $20/mes','Prototipo o app pequeña desde el navegador','replit.com'],
+['Glide','F','Gratis con límites · desde ~$25/mes','Convertir una hoja de cálculo en app','glideapps.com'],
+['Lovable','F','Gratis con límites · hasta ~$50/mes','MVP web con código exportable','lovable.dev'],
+['Bolt.new','F','Gratis con límites · desde $20/mes','Prototipar una app web sin instalar nada','bolt.new'],
+['Firebase Studio (Google)','G','Gratis · cierra el 22/03/2027','Prototipar gratis en Firebase, sabiendo que cierra','firebase.studio']]],
+['🖌️','Diseño y edición de fotos',[
+['Canva (Magic Studio)','F','Gratis con límites · Pro desde ~$15/mes','Piezas para redes y marca sin saber diseño','canva.com'],
+['Adobe Firefly','F','Créditos mensuales · desde ~$10/mes','Uso comercial más seguro con Adobe','firefly.adobe.com'],
+['Photoroom','F','Gratis con marca de agua · Pro ~$10/mes','Fotos de producto con el celular','photoroom.com'],
+['remove.bg','F','Gratis en resolución estándar','Quitar fondos rápido','remove.bg'],
+['Clipdrop','F','Gratis con límites · Pro ~$9/mes','Retoques rápidos con herramientas sueltas','clipdrop.co'],
+['Upscayl','G','Gratis, código abierto','Mejorar fotos de baja resolución sin subirlas a la nube','upscayl.org'],
+['Looka','P','Logo básico desde ~$20 (pago único)','Identidad visual rápida para emprendedores','looka.com'],
+['Figma (Figma Make)','F','Gratis con límites · pago por editor','Prototipos de apps y sitios web','figma.com/make'],
+['Recraft','F','Créditos diarios · desde ~$10/mes','Ilustraciones y logos vectoriales','recraft.ai']]],
+['✍️','Escritura y marketing',[
+['Jasper','P','Desde ~$39/mes','Contenido consistente con la voz de la marca','jasper.ai'],
+['Rytr','F','Gratis 10.000 caracteres/mes · desde ~$9/mes','Textos rápidos y baratos','rytr.me'],
+['Writesonic','F','Gratis con límites · planes mensuales','Blogs y tiendas con apoyo de SEO','writesonic.com'],
+['Grammarly','F','Gratis · Pro desde ~$12/mes','Textos profesionales sin errores, sobre todo en inglés','grammarly.com'],
+['QuillBot','F','Gratis con límites · desde ~$9/mes','Reformular o resumir textos','quillbot.com'],
+['DeepL','F','Gratis con límites · Pro desde ~$9/mes','Traducir documentos con buen estilo','deepl.com'],
+['Sudowrite','P','Desde ~$10/mes','Novelistas y guionistas con bloqueo creativo','sudowrite.com'],
+['Surfer','P','Desde ~$99/mes','Posicionar blogs y sitios en Google','surferseo.com'],
+['Predis.ai','F','Créditos limitados gratis · planes mensuales','Contenido constante para redes sociales','predis.ai']]],
+['🎓','Educación y aprendizaje',[
+['Duolingo Max','F','Gratis con anuncios · Max de pago','Aprender un idioma unos minutos al día','duolingo.com'],
+['Khanmigo (Khan Academy)','F','Gratis para docentes (EE. UU.)','Estudiantes de primaria a preparatoria y docentes','khanmigo.ai'],
+['Quizlet','F','Gratis con límites · Plus desde ~$8/mes','Memorizar y repasar para exámenes','quizlet.com'],
+['Photomath','F','Gratis · Plus de pago','Entender cómo se resuelve un ejercicio','photomath.com'],
+['Speak','P','Desde ~$20/mes (con prueba gratuita)','Perder el miedo a hablar un idioma','speak.com'],
+['Wolfram Alpha','F','Gratis con límites · Pro desde ~$7/mes','Cálculos confiables en ciencias e ingeniería','wolframalpha.com'],
+['Coursera Coach','I','Incluido en cursos de Coursera','Apoyo inmediato dentro de tus cursos','coursera.org'],
+['MagicSchool','F','Gratis para docentes · Plus de pago','Docentes que quieren ahorrar horas de planeación','magicschool.ai'],
+['Brainly','F','Gratis con límites · planes opcionales','Resolver dudas de tareas con explicaciones claras','brainly.com']]]
+];
+const T={G:['Gratis','g'],F:['Freemium','f'],P:['De pago','p'],I:['Incluido en otro plan','i']};
+const CMP=[['Chatbot general','ChatGPT Plus','Gemini / DeepSeek'],['Programar','Claude Code','GitHub Copilot Free'],['Comparar modelos','—','LMArena / Design Arena'],['Imágenes','Midjourney','Stable Diffusion'],['Video con personajes','Sora 2 / Kling / Higgsfield','Wan 2.2 Animate / LTX-2'],['Música con voz','Suno Pro','MusicGPT'],['Clonar voz','ElevenLabs','VibeVoice (dictado)'],['Presentaciones','Gamma Pro','Notion AI (básico)'],['Automatizar apps','Zapier AI','n8n (self-hosted)'],['IA local','—','Pinokio'],['Agente de voz / ventas','Retell AI / Synthflow','ChatGPT (Realtime, manual)'],['Crear una app completa','Base44 / Replit','Firebase Studio / Glide'],['Diseño y edición de fotos','Canva Pro / Adobe Firefly','Upscayl / remove.bg'],['Escribir y marketing','Jasper / Grammarly Premium','QuillBot / DeepL'],['Estudiar e idiomas','Duolingo Max / Speak','Khanmigo / Photomath']];
+const PRF=[['Creador de contenido (presupuesto cero)','Wan 2.2 Animate + Pinokio + Stable Diffusion + VibeVoice','Cubre animación, imagen, voz y creación local sin pagar una sola suscripción.','#1e9e4f'],['Creador de contenido (con presupuesto)','ChatGPT + Midjourney + Suno + ElevenLabs + Gamma','Cubre texto, imagen, música, voz y presentaciones sin duplicar herramientas.','#6b7280'],['Desarrollador / equipo técnico','Claude + Claude Code + GitHub Copilot + n8n','Claude para razonar sobre el proyecto completo, Copilot para el día a día, n8n para automatizar procesos internos.','#1c9be0'],['Empresa / equipo de ventas','Gemini (Workspace) + Retell AI o Synthflow + Zapier AI','Prioriza integración entre herramientas y atención telefónica automatizada por sobre la potencia bruta de un modelo.','#f07a1a'],['Estudiante','ChatGPT o Claude (gratis) + NotebookLM + Perplexity','Gratis en su mayoría; NotebookLM permite estudiar del propio material sin mezclarlo con la web.','#e8b014'],['Emprendedor sin conocimientos técnicos','Base44 + Lovable + Firebase Studio','Cubre desde el prototipo gratis hasta la app en producción con backend real, sin escribir código.','#e8b014']];
+const s={v:'h',c:-1,t:'',q:''};
+const $=id=>document.getElementById(id);
+const norm=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+function chips(){
+  $('tabs').innerHTML=[['h','Herramientas'],['c','Gratis vs. pago'],['r','Por perfil']].map(([k,l])=>`<button data-v="${k}" class="${s.v===k?'on':''}">${l}</button>`).join('');
+  $('tools').style.display=s.v==='h'?'':'none';
+  $('cats').innerHTML=`<button data-c="-1" class="${s.c<0?'on':''}">Todas</button>`+D.map((d,i)=>`<button data-c="${i}" class="${s.c===i?'on':''}">${d[0]} ${d[1]}</button>`).join('');
+  $('typ').innerHTML=`<button data-t="" class="${s.t===''?'on':''}">Todos los precios</button>`+Object.keys(T).map(k=>`<button data-t="${k}" class="${s.t===k?'on':''}">${T[k][0]}</button>`).join('');
+}
+function card(t){
+  const [n,ty,pr,id,u]=t;
+  return `<div class="card"><h3><a href="https://${u}" target="_blank" rel="noopener">${n}</a></h3><span class="b ${T[ty][1]}">${T[ty][0]}</span><span class="pr">${pr}</span><span class="id"><b>Ideal para:</b> ${id}</span></div>`;
+}
+function res(){
+  const r=$('res');
+  if(s.v==='c'){r.innerHTML=`<h2>Gratis vs. pago</h2><p class="sub">Para cada tarea, la opción de pago más recomendada y su mejor alternativa gratuita.</p><div class="w"><table><tr><th>Tarea</th><th>Recomendada (de pago)</th><th>Alternativa gratuita</th></tr>${CMP.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('')}</table></div>`;return}
+  if(s.v==='r'){r.innerHTML=`<h2>Recomendaciones por perfil</h2>`+PRF.map(p=>`<div class="pf" style="border-left-color:${p[3]}"><h3>${p[0]}</h3><b>${p[1]}</b><p>${p[2]}</p></div>`).join('');return}
+  const q=norm(s.q.trim());let n=0,h='';
+  D.forEach((d,i)=>{
+    if(s.c>=0&&s.c!==i)return;
+    const ts=d[2].filter(t=>(!s.t||t[1]===s.t)&&(!q||norm(t[0]+' '+t[3]+' '+t[2]).includes(q)));
+    if(!ts.length)return;n+=ts.length;
+    h+=`<h2>${d[0]} ${d[1]}</h2><div class="grid">${ts.map(card).join('')}</div>`;
+  });
+  r.innerHTML=n?`<p class="n">${n} herramienta${n===1?'':'s'}</p>${h}`:'<p class="n">Sin resultados. Prueba otra palabra o quita los filtros.</p>';
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.v){s.v=b.dataset.v}
+  else if(b.dataset.c!==undefined){s.c=+b.dataset.c}
+  else if(b.dataset.t!==undefined){s.t=b.dataset.t}
+  else return;
+  chips();res();
+});
+$('q').addEventListener('input',e=>{s.q=e.target.value;res()});
+chips();res();
+</script>
+</body>
+</html>
